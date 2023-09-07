@@ -1,0 +1,33 @@
+function ColourEvents() {
+  var today = new Date();
+  var nextmonth = new Date();
+  nextmonth.setDate(nextmonth.getDate() + 31);
+  Logger.log(today + " " + nextmonth);
+
+
+  var calendars = CalendarApp.getAllOwnedCalendars();
+  Logger.log("found number of calendars: " + calendars.length);
+
+  mapList = [
+    ["latin", CalendarApp.EventColor.PALE_RED],
+    ["physics", CalendarApp.EventColor.GRAY],
+    ["economics", CalendarApp.EventColor.YELLOW],
+    ["math", CalendarApp.EventColor.ORANGE],
+    ["chemistry", CalendarApp.EventColor.GREEN],
+    ["english", CalendarApp.EventColor.RED],
+    ["theory of knowledge", CalendarApp.EventColor.MAUVE]
+  ]
+
+  for (var i=0; i<calendars.length; i++) {
+    var calendar = calendars[i];
+    var events = calendar.getEvents(today, nextmonth);
+    for (var j=0; j<events.length; j++) {
+      var e = events[j];
+      var title = e.getTitle().toLowerCase();
+
+      for (var k=0; k<mapList.length; k++) {
+        if (title.includes(mapList[k][0])) e.setColor(mapList[k][1]);
+      }
+    }
+  }
+}
